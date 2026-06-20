@@ -1,10 +1,12 @@
 import { Elysia } from 'elysia';
 import { db } from './db';
 import { users } from './db/schema';
+import { userRoutes } from './routes/user-routes';
 
 const port = process.env.PORT || 3000;
 
 const app = new Elysia()
+  .use(userRoutes)
   .get('/', () => ({ 
     message: 'Welcome to Elysia + Drizzle + MySQL project running on Bun!' 
   }))
