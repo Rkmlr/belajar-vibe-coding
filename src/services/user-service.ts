@@ -97,31 +97,23 @@ export const UserService = {
   },
 
   async getCurrentUser(token: string) {
-    // 1. Get session and user using inner join
-    const [result] = await db
-      .select({
-        id: users.id,
-        name: users.username,
-        email: users.email,
-        createdAt: users.createdAt,
-        updatedAt: users.updatedAt,
-      })
-      .from(sessions)
-      .innerJoin(users, eq(sessions.userId, users.id))
-      .where(eq(sessions.token, token))
-      .limit(1);
+    const session = await db.query.sessions.findFirst({
+      where: eq(sessions.token, token),
+    });
 
-    if (!result) {
-      throw new Error('Unauthorized');
+    if (!session) {
+      throw new Error("Unauthorized");
     }
 
-    return {
-      id: result.id,
-      name: result.name,
-      email: result.email,
-      createdAt: result.createdAt,
-      updatedAt: result.updatedAt,
-    };
+    const user = await db.query.users.findFirst({
+      where: eq(users.id, session.userId),
+    });
+
+    if (!user) {
+      throw new Error("Unauthorized");
+    }
+
+    return user;
   },
 };
 

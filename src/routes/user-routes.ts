@@ -80,7 +80,7 @@ export const userRoutes = new Elysia({ prefix: '/api' })
       return {
         data: {
           id: user.id,
-          name: user.name,
+          name: user.username,
           email: user.email,
           created_at: user.createdAt,
         },
