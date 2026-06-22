@@ -38,7 +38,12 @@ export const userRoutes = new Elysia({ prefix: '/api' })
       name: t.String({ minLength: 1, maxLength: 255, error: 'Nama tidak valid, harus diisi dan maksimal 255 karakter' }),
       email: t.String({ pattern: '^[^\\s@]+@[^\\s@]+$', maxLength: 255, error: 'Format email tidak valid atau terlalu panjang' }),
       password: t.String({ minLength: 6, maxLength: 72, error: 'Password tidak valid, minimal 6 dan maksimal 72 karakter' }),
-    })
+    }),
+    detail: {
+      tags: ['Users API'],
+      summary: 'Registrasi Pengguna Baru',
+      description: 'Mendaftarkan pengguna baru dengan username, email, dan password.',
+    }
   })
   .post('/users/login', async ({ body, set }) => {
     try {
@@ -66,7 +71,12 @@ export const userRoutes = new Elysia({ prefix: '/api' })
       name: t.String({ minLength: 1, maxLength: 255, error: 'Nama tidak valid, harus diisi dan maksimal 255 karakter' }),
       email: t.String({ pattern: '^[^\\s@]+@[^\\s@]+$', maxLength: 255, error: 'Format email tidak valid atau terlalu panjang' }),
       password: t.String({ minLength: 6, maxLength: 72, error: 'Password tidak valid, minimal 6 dan maksimal 72 karakter' }),
-    })
+    }),
+    detail: {
+      tags: ['Users API'],
+      summary: 'Login Pengguna',
+      description: 'Mengotentikasi pengguna menggunakan email dan password, mengembalikan token sesi (Bearer token).',
+    }
   })
   .group('', (app) =>
     app
@@ -98,6 +108,13 @@ export const userRoutes = new Elysia({ prefix: '/api' })
           set.status = 401;
           return { error: error.message || 'Unauthorized' };
         }
+      }, {
+        detail: {
+          tags: ['Users API'],
+          summary: 'Dapatkan Profil Pengguna Saat Ini',
+          description: 'Mengembalikan data profil pengguna yang sedang login berdasarkan Bearer token.',
+          security: [{ BearerAuth: [] }],
+        }
       })
       .delete('/users/logout', async ({ token, set }) => {
         try {
@@ -109,6 +126,13 @@ export const userRoutes = new Elysia({ prefix: '/api' })
         } catch (error: any) {
           set.status = 401;
           return { error: error.message || 'Unauthorized' };
+        }
+      }, {
+        detail: {
+          tags: ['Users API'],
+          summary: 'Logout Pengguna',
+          description: 'Menghapus token sesi aktif pengguna dari database.',
+          security: [{ BearerAuth: [] }],
         }
       })
   );
