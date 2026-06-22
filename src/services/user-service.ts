@@ -95,5 +95,33 @@ export const UserService = {
     // 5. Return the token
     return token;
   },
+
+  async getCurrentUser(token: string) {
+    // 1. Get session and user using inner join
+    const [result] = await db
+      .select({
+        id: users.id,
+        name: users.username,
+        email: users.email,
+        createdAt: users.createdAt,
+        updatedAt: users.updatedAt,
+      })
+      .from(sessions)
+      .innerJoin(users, eq(sessions.userId, users.id))
+      .where(eq(sessions.token, token))
+      .limit(1);
+
+    if (!result) {
+      throw new Error('Unauthorized');
+    }
+
+    return {
+      id: result.id,
+      name: result.name,
+      email: result.email,
+      created_at: result.createdAt,
+      updated_at: result.updatedAt,
+    };
+  },
 };
 
