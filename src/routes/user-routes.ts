@@ -35,9 +35,9 @@ export const userRoutes = new Elysia({ prefix: '/api' })
     }
   }, {
     body: t.Object({
-      name: t.String({ minLength: 1, maxLength: 255, error: 'Name harus diisi' }),
-      email: t.String({ pattern: '^[^\\s@]+@[^\\s@]+$', error: 'Format email tidak valid' }),
-      password: t.String({ minLength: 6, error: 'Password minimal 6 karakter' }),
+      name: t.String({ minLength: 1, maxLength: 255, error: 'Nama tidak valid, harus diisi dan maksimal 255 karakter' }),
+      email: t.String({ pattern: '^[^\\s@]+@[^\\s@]+$', maxLength: 255, error: 'Format email tidak valid atau terlalu panjang' }),
+      password: t.String({ minLength: 6, maxLength: 72, error: 'Password tidak valid, minimal 6 dan maksimal 72 karakter' }),
     })
   })
   .post('/users/login', async ({ body, set }) => {
@@ -63,9 +63,9 @@ export const userRoutes = new Elysia({ prefix: '/api' })
     }
   }, {
     body: t.Object({
-      name: t.String({ minLength: 1, maxLength: 255, error: 'Name harus diisi' }),
-      email: t.String({ pattern: '^[^\\s@]+@[^\\s@]+$', error: 'Format email tidak valid' }),
-      password: t.String({ minLength: 6, error: 'Password minimal 6 karakter' }),
+      name: t.String({ minLength: 1, maxLength: 255, error: 'Nama tidak valid, harus diisi dan maksimal 255 karakter' }),
+      email: t.String({ pattern: '^[^\\s@]+@[^\\s@]+$', maxLength: 255, error: 'Format email tidak valid atau terlalu panjang' }),
+      password: t.String({ minLength: 6, maxLength: 72, error: 'Password tidak valid, minimal 6 dan maksimal 72 karakter' }),
     })
   })
   .group('', (app) =>
