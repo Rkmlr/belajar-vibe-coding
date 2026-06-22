@@ -1,4 +1,5 @@
 import { Elysia } from 'elysia';
+import { swagger } from '@elysiajs/swagger';
 import { db } from './db';
 import { users } from './db/schema';
 import { userRoutes } from './routes/user-routes';
@@ -6,6 +7,26 @@ import { userRoutes } from './routes/user-routes';
 const port = process.env.PORT || 3000;
 
 const app = new Elysia()
+  .use(
+    swagger({
+      path: '/swagger',
+      documentation: {
+        info: {
+          title: 'Belajar Vibe Coding API',
+          version: '1.0.0',
+          description: 'Dokumentasi REST API interaktif untuk aplikasi Belajar Vibe Coding',
+        },
+        components: {
+          securitySchemes: {
+            BearerAuth: {
+              type: 'http',
+              scheme: 'bearer',
+            },
+          },
+        },
+      },
+    })
+  )
   .use(userRoutes)
   .get('/', () => ({ 
     message: 'Welcome to Elysia + Drizzle + MySQL project running on Bun!' 
