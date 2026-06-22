@@ -52,12 +52,12 @@ export const userRoutes = new Elysia({ prefix: '/api' })
         })
       }),
       400: t.Object({
-        success: t.Boolean(),
+        success: t.Literal(false),
         message: t.String(),
         data: t.Null(),
       }),
       500: t.Object({
-        success: t.Boolean(),
+        success: t.Literal(false),
         message: t.String(),
         data: t.Null(),
       })
@@ -102,7 +102,7 @@ export const userRoutes = new Elysia({ prefix: '/api' })
         data: t.String(),
       }),
       401: t.Object({
-        success: t.Boolean(),
+        success: t.Literal(false),
         message: t.String(),
         error: t.String(),
       })
