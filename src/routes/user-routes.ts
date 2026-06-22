@@ -66,5 +66,29 @@ export const userRoutes = new Elysia({ prefix: '/api' })
       email: t.String({ pattern: '^[^\\s@]+@[^\\s@]+$', error: 'Format email tidak valid' }),
       password: t.String({ minLength: 6, error: 'Password minimal 6 karakter' }),
     })
+  })
+  .get('/users/current', async ({ headers, set }) => {
+    try {
+      const auth = headers['authorization'];
+      if (!auth || !auth.startsWith('Bearer ')) {
+        throw new Error('Unauthorized');
+      }
+
+      const token = auth.split(" ")[1] ?? "";
+      const user = await UserService.getCurrentUser(token);
+
+      return {
+        data: {
+          id: user.id,
+          name: user.username,
+          email: user.email,
+          created_at: user.createdAt,
+        },
+      };
+    } catch (error: any) {
+      set.status = 401;
+      return { error: error.message || 'Unauthorized' };
+    }
   });
+
 
