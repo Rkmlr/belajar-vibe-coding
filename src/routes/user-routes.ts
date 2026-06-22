@@ -25,16 +25,17 @@ export const userRoutes = new Elysia({ prefix: '/api' })
         };
       }
 
+      console.error(error);
       set.status = 500;
       return {
         success: false,
-        message: error.message || 'Terjadi kesalahan pada server',
+        message: 'Terjadi kesalahan internal pada server',
         data: null,
       };
     }
   }, {
     body: t.Object({
-      name: t.String({ minLength: 1, error: 'Name harus diisi' }),
+      name: t.String({ minLength: 1, maxLength: 255, error: 'Name harus diisi' }),
       email: t.String({ pattern: '^[^\\s@]+@[^\\s@]+$', error: 'Format email tidak valid' }),
       password: t.String({ minLength: 6, error: 'Password minimal 6 karakter' }),
     })
@@ -62,7 +63,7 @@ export const userRoutes = new Elysia({ prefix: '/api' })
     }
   }, {
     body: t.Object({
-      name: t.String({ minLength: 1, error: 'Name harus diisi' }),
+      name: t.String({ minLength: 1, maxLength: 255, error: 'Name harus diisi' }),
       email: t.String({ pattern: '^[^\\s@]+@[^\\s@]+$', error: 'Format email tidak valid' }),
       password: t.String({ minLength: 6, error: 'Password minimal 6 karakter' }),
     })
