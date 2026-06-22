@@ -15,6 +15,15 @@ export interface LoginUserPayload {
 }
 
 export const UserService = {
+  /**
+   * Mendaftarkan pengguna baru ke dalam database.
+   * Melakukan pengecekan duplikasi email, melakukan hashing password dengan bcrypt,
+   * dan mengembalikan data pengguna baru yang telah tersimpan.
+   *
+   * @param payload - Objek yang berisi name, email, dan password pengguna.
+   * @returns Data pengguna yang berhasil didaftarkan (tanpa password).
+   * @throws Error jika email sudah terdaftar atau gagal mengambil data setelah insert.
+   */
   async registerUser(payload: RegisterUserPayload) {
     // 1. Check if email already exists
     const existingUsers = await db
@@ -65,6 +74,15 @@ export const UserService = {
     };
   },
 
+  /**
+   * Mengotentikasi pengguna berdasarkan email dan password.
+   * Memeriksa keberadaan pengguna, memverifikasi kecocokan hash password,
+   * dan membuat sesi otentikasi baru (token UUID) jika kredensial valid.
+   *
+   * @param payload - Objek yang berisi email dan password pengguna.
+   * @returns Token sesi (UUID) sebagai string.
+   * @throws Error jika email tidak ditemukan atau password tidak cocok.
+   */
   async loginUser(payload: LoginUserPayload) {
     // 1. Find user by email
     const [user] = await db
@@ -96,6 +114,14 @@ export const UserService = {
     return token;
   },
 
+  /**
+   * Mengambil data profil pengguna yang saat ini sedang login berdasarkan token sesi.
+   * Memvalidasi apakah token tersebut ada di dalam database sesi dan mengambil data pengguna terkait.
+   *
+   * @param token - Token otentikasi (Bearer token) dari sesi pengguna.
+   * @returns Objek data pengguna yang terkait dengan sesi tersebut.
+   * @throws Error "Unauthorized" jika token tidak valid, sesi tidak ditemukan, atau pengguna tidak ada.
+   */
   async getCurrentUser(token: string) {
     const session = await db.query.sessions.findFirst({
       where: eq(sessions.token, token),
@@ -116,6 +142,12 @@ export const UserService = {
     return user;
   },
 
+  /**
+   * Mengakhiri sesi pengguna dengan menghapus token otentikasi dari database.
+   *
+   * @param token - Token otentikasi sesi yang ingin dihapus.
+   * @throws Error "Unauthorized" jika token tidak valid atau sesi sudah tidak ada.
+   */
   async logoutUser(token: string) {
     const [result] = await db.delete(sessions).where(eq(sessions.token, token));
 
