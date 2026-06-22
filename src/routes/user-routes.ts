@@ -19,18 +19,14 @@ export const userRoutes = new Elysia({ prefix: '/api' })
       if (error.message === 'Email sudah terdaftar') {
         set.status = 400;
         return {
-          success: false,
-          message: 'Email sudah terdaftar',
-          data: null,
+          error: 'Email sudah terdaftar',
         };
       }
 
       console.error(error);
       set.status = 500;
       return {
-        success: false,
-        message: 'Terjadi kesalahan internal pada server',
-        data: null,
+        error: 'Terjadi kesalahan internal pada server',
       };
     }
   }, {
@@ -52,14 +48,10 @@ export const userRoutes = new Elysia({ prefix: '/api' })
         })
       }),
       400: t.Object({
-        success: t.Literal(false),
-        message: t.String(),
-        data: t.Null(),
+        error: t.String(),
       }),
       500: t.Object({
-        success: t.Literal(false),
-        message: t.String(),
-        data: t.Null(),
+        error: t.String(),
       })
     },
     detail: {
@@ -84,8 +76,6 @@ export const userRoutes = new Elysia({ prefix: '/api' })
     } catch (error: any) {
       set.status = 401;
       return {
-        success: false,
-        message: 'Email atau password salah',
         error: 'Email atau password salah',
       };
     }
@@ -102,8 +92,6 @@ export const userRoutes = new Elysia({ prefix: '/api' })
         data: t.String(),
       }),
       401: t.Object({
-        success: t.Literal(false),
-        message: t.String(),
         error: t.String(),
       })
     },

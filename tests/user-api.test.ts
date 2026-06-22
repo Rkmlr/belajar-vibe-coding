@@ -64,8 +64,7 @@ describe("User API Registration Suite (POST /api/users)", () => {
     
     expect(response.status).toBe(400);
     const body = await response.json();
-    expect(body.success).toBe(false);
-    expect(body.message).toBe("Email sudah terdaftar");
+    expect(body.error).toBe("Email sudah terdaftar");
   });
 
   it("should fail registration if email format is invalid (no @)", async () => {
@@ -170,8 +169,7 @@ describe("User API Login Suite (POST /api/users/login)", () => {
 
     expect(response.status).toBe(401);
     const body = await response.json();
-    expect(body.success).toBe(false);
-    expect(body.message).toBe("Email atau password salah");
+    expect(body.error).toBe("Email atau password salah");
   });
 
   it("should fail login if email is not registered", async () => {
@@ -189,8 +187,7 @@ describe("User API Login Suite (POST /api/users/login)", () => {
 
     expect(response.status).toBe(401);
     const body = await response.json();
-    expect(body.success).toBe(false);
-    expect(body.message).toBe("Email atau password salah");
+    expect(body.error).toBe("Email atau password salah");
   });
 
   it("should fail login with invalid payload validation", async () => {
