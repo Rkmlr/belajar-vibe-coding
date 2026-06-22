@@ -119,8 +119,8 @@ export const UserService = {
       id: result.id,
       name: result.name,
       email: result.email,
-      created_at: result.createdAt,
-      updated_at: result.updatedAt,
+      createdAt: result.createdAt,
+      updatedAt: result.updatedAt,
     };
   },
 };

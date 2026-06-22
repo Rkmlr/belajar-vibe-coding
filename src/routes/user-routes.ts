@@ -69,25 +69,25 @@ export const userRoutes = new Elysia({ prefix: '/api' })
   })
   .get('/users/current', async ({ headers, set }) => {
     try {
-      const authHeader = headers['authorization'];
-      if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        set.status = 401;
-        return {
-          error: 'Unauthorized',
-        };
+      const auth = headers['authorization'];
+      if (!auth || !auth.startsWith('Bearer ')) {
+        throw new Error('Unauthorized');
       }
 
-      const token = authHeader.substring(7);
+      const token = auth.split(" ")[1] ?? "";
       const user = await UserService.getCurrentUser(token);
 
       return {
-        data: user,
+        data: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          created_at: user.createdAt,
+        },
       };
     } catch (error: any) {
       set.status = 401;
-      return {
-        error: 'Unauthorized',
-      };
+      return { error: error.message || 'Unauthorized' };
     }
   });
 
