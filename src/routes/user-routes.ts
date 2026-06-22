@@ -39,6 +39,29 @@ export const userRoutes = new Elysia({ prefix: '/api' })
       email: t.String({ pattern: '^[^\\s@]+@[^\\s@]+$', maxLength: 255, error: 'Format email tidak valid atau terlalu panjang' }),
       password: t.String({ minLength: 6, maxLength: 72, error: 'Password tidak valid, minimal 6 dan maksimal 72 karakter' }),
     }),
+    response: {
+      200: t.Object({
+        success: t.Boolean(),
+        message: t.String(),
+        data: t.Object({
+          id: t.Number(),
+          name: t.String(),
+          email: t.String(),
+          created_at: t.Any(),
+          updated_at: t.Any(),
+        })
+      }),
+      400: t.Object({
+        success: t.Boolean(),
+        message: t.String(),
+        data: t.Null(),
+      }),
+      500: t.Object({
+        success: t.Boolean(),
+        message: t.String(),
+        data: t.Null(),
+      })
+    },
     detail: {
       tags: ['Users API'],
       summary: 'Registrasi Pengguna Baru',
@@ -72,6 +95,18 @@ export const userRoutes = new Elysia({ prefix: '/api' })
       email: t.String({ pattern: '^[^\\s@]+@[^\\s@]+$', maxLength: 255, error: 'Format email tidak valid atau terlalu panjang' }),
       password: t.String({ minLength: 6, maxLength: 72, error: 'Password tidak valid, minimal 6 dan maksimal 72 karakter' }),
     }),
+    response: {
+      200: t.Object({
+        success: t.Boolean(),
+        message: t.String(),
+        data: t.String(),
+      }),
+      401: t.Object({
+        success: t.Boolean(),
+        message: t.String(),
+        error: t.String(),
+      })
+    },
     detail: {
       tags: ['Users API'],
       summary: 'Login Pengguna',
@@ -109,6 +144,19 @@ export const userRoutes = new Elysia({ prefix: '/api' })
           return { error: error.message || 'Unauthorized' };
         }
       }, {
+        response: {
+          200: t.Object({
+            data: t.Object({
+              id: t.Number(),
+              name: t.String(),
+              email: t.String(),
+              created_at: t.Any(),
+            })
+          }),
+          401: t.Object({
+            error: t.String()
+          })
+        },
         detail: {
           tags: ['Users API'],
           summary: 'Dapatkan Profil Pengguna Saat Ini',
@@ -128,6 +176,14 @@ export const userRoutes = new Elysia({ prefix: '/api' })
           return { error: error.message || 'Unauthorized' };
         }
       }, {
+        response: {
+          200: t.Object({
+            data: t.String()
+          }),
+          401: t.Object({
+            error: t.String()
+          })
+        },
         detail: {
           tags: ['Users API'],
           summary: 'Logout Pengguna',
