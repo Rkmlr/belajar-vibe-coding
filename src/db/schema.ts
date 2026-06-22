@@ -22,3 +22,15 @@ export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Post = typeof posts.$inferSelect;
 export type NewPost = typeof posts.$inferInsert;
+
+export const sessions = mysqlTable('sessions', {
+  id: int('id').autoincrement().primaryKey(),
+  token: varchar('token', { length: 255 }).notNull().unique(),
+  userId: int('user_id').notNull().references(() => users.id),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
+});
+
+export type Session = typeof sessions.$inferSelect;
+export type NewSession = typeof sessions.$inferInsert;
+
