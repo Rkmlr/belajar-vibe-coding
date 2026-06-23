@@ -152,3 +152,26 @@ Untuk aplikasi yang skalanya membesar, kode harus dipisah agar mudah dikelola da
 
 **Catatan Pembelajaran:** 
 Untuk tahap awal/pemula, menggabungkan logika *Repository* ke dalam *Service* (*Fat Service*) seperti yang Anda lakukan saat ini sangat wajar dan dianjurkan agar tidak *over-engineering*. Struktur yang lebih rumit dengan memisahkan `repositories` baru diaplikasikan saat proyek sudah besar (misalnya saat file service mencapai ratusan baris).
+
+---
+
+## 6. Infrastruktur & Deployment (Hosting vs VPS)
+
+Membuat kode hanyalah 50% dari perjalanan. Sisa 50% adalah membuat aplikasi "hidup" di internet agar bisa diakses pengguna.
+
+### A. Shared Hosting vs VPS
+*   **Shared Hosting (Hosting Biasa/cPanel):** Ibarat menyewa 1 kamar kos. Fasilitas dibagi bersama pengguna lain. **Tidak cocok untuk aplikasi Bun** karena tidak memberi kebebasan instalasi *environment*.
+*   **VPS (Virtual Private Server):** Ibarat menyewa 1 lantai apartemen secara eksklusif. Anda bebas meng-install OS Linux, Bun, Docker, MySQL, dan memegang kendali penuh. Inilah standar industri.
+
+### B. Tahapan Membayar Server
+Anda **belum perlu membayar** saat masih tahap belajar. Anda bisa mendeploy secara gratis (Free Tier) menggunakan platform PaaS seperti *Railway*, *Render*, atau *Fly.io*.
+Anda baru **wajib beralih ke server berbayar** jika:
+1. Memiliki pengguna aktif sungguhan (Real Users). Server gratisan biasanya akan "tertidur" jika tidak ada interaksi selama beberapa menit, membuat *loading* pertama sangat lambat.
+2. Membutuhkan database yang aman, di-backup setiap hari, dan ruang penyimpanannya lebih dari batasan gratis (biasanya >50MB).
+3. Membutuhkan nama domain resmi (contoh: `www.toko-vibe.com`).
+
+### C. Persiapan Masuk ke Dunia Industri (Deployment)
+1.  **Docker:** Kode harus dibungkus menjadi *Container* agar dijamin bisa berjalan di server manapun tanpa error konfigurasi.
+2.  **Domain & SSL (HTTPS):** Mengamankan lalu lintas data pengguna.
+3.  **CI/CD (Continuous Integration/Deployment):** Setup otomatis menggunakan *GitHub Actions*. Setiap *push* ke branch `main`, server akan mengambil dan memperbarui kode secara mandiri.
+4.  **Reverse Proxy (Nginx/Caddy):** Server yang bertugas menerima akses lalu lintas HTTP/HTTPS dari publik dan meneruskannya ke port aplikasi Bun Anda (misal port 3000) secara rahasia.
